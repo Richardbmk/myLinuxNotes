@@ -1,0 +1,9 @@
+# 7. Things to Do After Installing Ubuntu
+
+> sudo apt update
+> sudo apt full-upgrade
+> sudo bash <name_of_script_to_install>
+
+> sudo apt-get install build-essential gcc make perl dkms
+
+> reboot

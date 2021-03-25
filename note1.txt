@@ -1,0 +1,127 @@
+## 14. Linux Command-Line: The Absolute Basics
+
+--> Bigining of the line = crtl + A
+--> End of the line = crtl + E
+
+Go to the AWS Machine:
+----> ssh -i "key-for-Ubuntu-home.pem" ubuntu@ec2-15-237-50-92.eu-west-3.compute.amazonaws.com
+
+## 16. Updating and Installing Software on Ubuntu
+
+$ apt-get update
+$ apt-get upgrade
+$ apt-get -y upgrade
+
+$ apt-get -y install <name of softwre>
+$ apt-get remove <name of softwre>
+$ apt-cache search 
+
+
+# 17. Installing Required Software for our Hosting Platform
+
+$ apt install mysql-server
+$ apt install nginx php-mysql php-fpm monit
+
+$ add-apt-repository ppa:nginx/stable
+$ apt-get update
+$ apt-get install nginx
+
+$ netstat -tupln
+$ ifconfig
+
+## 18. Linux Services Overview
+
+$ systemctl:manages services
+$ journalctl:manages logs
+
+## 19. Service Management with systemd
+
+$ systemctl status mysql 
+$ systemctl start nginx php5-fpm monit 
+$ systemctl enable mysql nginx php5-fpm monit
+
+    ## Joarnalctl commands:
+    $ journalctl -xn
+    $ journalctl -u <unit>
+    $ journalctl -b
+    $ journalctl -f
+    $ journalctl --since "10 min ago"
+
+## 22. How to Edit Files with nano
+
+- in the nano editor:
+: crtl + W (For search words)
+
+
+## 23. Advanced Bash Shell Usage
+
+$ echo "hi my name is richard" > logfile.log (Override a file)
+$ echo "hi my name is richard" >> logfile.log (append a file)
+$ mail -s "important greetings" dave@tutorial.com < logfile.log (Take the conent in logfile.com)
+
+$ date
+$ man date (To pass options)
+
+$ echo "$(/bin/date) - hi there" > logfile.log
+$ echo "$(/bin/date) - hi there" >> logfile.log
+
+$ which date
+
+$ echo "hi again" && "goodbye"
+
+$ echo "$(/bin/date) - hi there" > logfile.log && echo "Done!"
+$ nocomand || echo "This is simple for me" >> logfile.log
+
+$ man grep (search trhough files matching lines)
+$ cat /etc/network/interfaces
+
+$ grep Sun logfile.log (search for the lines with Sun)
+$ grep Sun logfile.log | grep Yes (search for the lines with Sun Narow the search use |)
+$ grep Sun logfile.log | cut -d " " -f2
+
+## 24. How Configuration Files Work in Linux
+
+Where to find file to configure?
+
+SSH: ssh/sshd_config
+WebServer: /etc/nginx/{nginx.conf,conf.d}
+Database: /etc/mysql/mysql.conf
+PHP Interpreter: /etc/php5/fpm/php.ini
+WordPress: ~/wp-config.php
+
+$ less /etc/ssh/sshd_config (To see what insde the file)
+
+## 25. Creating a System User: Linux Users and Groups
+
+$ adduser websiteuser
+$ su - websiteuser
+$ crtl + D (Get out of user directory)
+
+$ ls -l
+$ ls -alh /etc/ssh/
+
+# 26. Changing Ownership and Permissions (and Reading Binary Code!)
+
+$ ls -l
+$ chown ww-data:ww-data <somefile>
+$ chmod 644 <somefile>
+$ chmod +x <somefile>
+$ chmod u+x <somefile>
+
+$ chmod g-r secret/keys
+$ chmod g-w secret/keys
+$ chomod 777 <somefile>
+
+
+## 27. Basic nginx Webserver Configuration
+
+$ cd /etc/nginx
+$ ls
+$ mv nginx.conf nginx.conf.ORG
+$ mkdir -p /usr/share/nginx/cache/fcgi
+$ nginx -t
+$ systemctl reload nginx
+
+
+## 29. Basic php-fpm Configuration
+
