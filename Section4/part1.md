@@ -67,9 +67,13 @@ lrwxrwxrwx   1 root root         8 feb  4 15:34 sbin -> usr/sbin
 drwxr-xr-x   8 root root      4096 feb  4 16:58 snap
 
 - Posible First caracters: "-", "d", "l" (Indicates the file types)
-    + "-" ==> means a Normal directory
+    + "-" ==> means a Normal file
     + "d" ==> means a directory
     + "d" ==> symbolic link (its a shortcut)
+    + "b" ==> indicates block devices
+    + "c" ==> indicates chart devices
+    + "s" ==> indicates socket
+    + "p" ==> indicates name pipe
 - Next 9 caracters: "w", "r", "x", "-", and more (Indicates the file permisions)
     + "w" ==> permision to write
     + "r" ==> permision to read
@@ -91,3 +95,86 @@ drwxr-xr-x   8 root root      4096 feb  4 16:58 snap
 - ls -lR /etc/ ==> List Recursively (list files in each subdirectories)
 - type ls
 - \ls ==> list but without colors
+
+## 31. Understanding File Timestamps: atime, mtime, ctime (stat, touch, date)
+
+- $ ls
+- $ stat /etc/passwd ==> show statistics about the file
+- $ ls -l /etc/
+- $ ls -lt /etc/ ==> show a list of directories with the modificaction time
+- $ ls -lu /etc/ ==> show a list of directories with the access time
+- $ ls -lc /etc/ ==> to see the change time
+- $ ls -l --full-time /etc/ ==> this show the full time
+- $ pwd ==> show content of the current directory
+
+--> Updating time of a file
+- $ touch linux.txt
+- $ ls -l linnux.txt ==> look for the modification time
+- $ stat linux.txt
+- $ touch "learning linux.txt" ==> to write files with white space
+
+- $ touch linux.txt
+- $ stat linux.txt
+- $ touch -a linux.txt ==> change only the access timestamp
+- $ stat linux.txt
+
+- $ touch -m linux.txt ==> change only the modification timestamp
+- $ stat linux.txt
+
+- $ date
+
+- $ touch -m -t 201812301430.45 linux.txt
+- $ stat linux.txt
+
+- $ touch -d "2010-10-31 15:45:45" linux.txt
+- $ stat linux.txt
+
+--> Set the timestamp of a file to the same value to another one file
+
+- $ touch ubuntu.txt
+- $ touch linux.txt -r ubuntu.txt
+- $ stat linux.txt
+- $ stat ubuntu.txt
+
+--> EXPLORE
+- $ date
+- $ date -u
+- $ man date
+
+## 32. Sorting Files by Timestamp
+- $ ls -l ==> Sort by name and alphabetic order
+- $ ls -lt ==> Sort by modification files. Newest files come first
+- $ ls -ltu ==> Sorting and showing by access time
+- $ ls -lu ==> Show the access file and sort by name. Alphabetic order
+- $ ls -lu -r <==> $ ls -lu --reverse ==> The "-r" just reverse the order
+- $ ls -ltur <==> $ ls -ltu --reverse
+
+
+## 33. File Types in Linux (ls -F, file)
+
+- $ file Desktop/linux.jpeg ==> gives info about a file
+- $ mv ~/Desktop/linux.jpeg ~/Desktep/linux.png
+- $ file Desktop/linux.png ==> gives info about a file
+
+See example of a block device
+- ls -l /dev/sda1
+
+See example of a chart device
+- ls -l /dev/
+
+See example of a socket
+- ls -l /run/
+
+Another way of classifying files
+- $ ls -F ==> Give info of the type of file at the end of the name
+- $ ls -F /etc/
+
+- symbols at the en of a file:
+    - "@" ==> Indicates symbolic links
+    - "=" ==> Indicates socket
+    - "/" ==> directory
+    - "|" ==> name pipe
+
+If this is cofusing, you can figure out the file type using the command "file"
+- file /etc/vtrgb ==> give info about the file
+- file run/* ==> gives info of all of the files inside run directory
