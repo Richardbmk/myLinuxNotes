@@ -125,3 +125,98 @@ there is no bin or trash to recover the deleted file using the command "rm"
     - "v", means verbose
     - "u", means remove a file after overwritint it
     - "-n 100", overides the files 100 times (the default is 3)
+
+
+## 44. Working With Pipes in Linux (|, wc)
+
+- $ ls -lS /etc/ ==> list by Size
+- $ ls -lS /etc/ | head ==> list by Size an then shows only the head
+
+- $ ls -lSh /etc/ | head -n 20 | tail -n 1
+
+- $ cat /var/log/auth.log ==> authentication are save there
+- $ cat -n /var/log/auth.log ==> "n" to see the line numbers
+
+- $ cat -n /var/log/auth.log | grep -a "authentication failure" ==> "grep" command is for filtering
+
+- $ cat -n /var/log/auth.log | grep -a "authentication failure" | wc -l ==> "wc" command counts how many lines were given
+
+"wc" command interpretation:
+- $ wc /etc/passwd 
+out put of the last line:
+48 83 2815 /etc/passwd
+48 --> lines
+83 --> words
+2815 --> characters
+
+- $ wc -l /etc/group ==> "l" give info only of the line counts
+- $ wc -w /usr/share/dict/american-english ==> "w" give info only of the word counts
+- $ wc -c /usr/share/dict/american-english ==> "l" give info only of the character counts
+
+- $ who
+- $ who | wc -l ==> how many user are login
+
+## 45. Command Redirection (>, >>, 2> &>, cut, tee)
+
+- $ ls
+- $ ls -l
+- $ ls -l > ls.txt ==> save the output in a file with the name of ls.txt
+- $ cat ls.txt
+
+- $ ifconfig
+- $ ifconfig > ls.txt ==> overide the content
+- $ cat ls.txt
+
+- $ ls -l > output.txt
+- $ ifconfig >> output.txt ==> append/add to the file
+- $ cat output.txt
+
+- $ who >> users.txt
+- $ ls
+- $ cat users.txt
+
+- $ tty ==> to see the file behind the terminal
+
+Redirect error message to a file:
+- $ tail -n 3 /etc/shadow 2> error.txt
+- $ cat error.txt
+
+- $ tail -n 3 /etc/shadow 2>> error.txt ==> to append!
+
+Redirect normal and error message to a file:
+- $ tail -2 /etc/passwd /etc/shadow ==> gives a normal out put and also an error
+- $ tail -2 /etc/passwd /etc/shadow > output.txt 2> error.txt
+- $ cat output.txt
+- $ cat error.txt
+
+- $ tail -2 /etc/passwd /etc/shadow > output.txt 2>&1 ==> the file content both error and standard output.
+- $ cat output.txt
+
+command redirection with PIPES (|):
+
+- $ ifconfig
+- $ ifconfig | grep ether
+- $ ifconfig | grep ether > mac.txt
+
+- $ ifconfig | grep ether | cut d" " -f10 ==> Not sure the meaning
+
+- $ ifconfig | grep ether | cut d" " -f10 > mac.txt
+- $ cat mac.txt
+
+- $ cat /etc/passwd
+- $ cut -d ":" -f1 /etc/passwd
+- $ cut -d ":" -f3 /etc/passwd
+
+- $ who > users.txt
+- $ ifconfig | grep ether
+- $ ifconfig | grep ether > mac.txt
+- $ ifconfig | grep ether | tee mac.txt ==> "tee" writes the output to the script and to the command (overides by default)
+- $ cat mac.txt
+- $ who | tee -a m.txt ==> the "a" is for appending and not overide
+
+- $ uname -r ==> to see the kernel version
+- $ uname -r | tee -a mac.txt kernel.txt
+- $ cat kernel.txt
+- $ cat mac.txt
+
+
