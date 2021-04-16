@@ -91,3 +91,79 @@ dir1/
 
 - $ sudo rsync -av -e ssh rickdevops@192.168.1.108:~/mydir1 ==> You will see a new file in the Centos machine
 
+## 111. Using wget
+
+- man wget ==> is for download files
+- sudo apt install wget
+
+- $ sudo wget https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso
+
+- $ mkdir kali
+- $ wget -P kali/ https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso ==> download the file in a different path
+
+- $ wget --limit-rate=100k -P kali/ https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso ==> to put some limit to the download
+
+- $ wget -c -P kali/ https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso ==> The download will continue from where it was left becouse of "c".
+
+- $ vim images.txt
+"""
+https://images-na.ssl-images-amazon.com/images/I/41YBgn9CiJL._SX324_BO1,204,203,200_.jpg
+https://images-na.ssl-images-amazon.com/images/I/61ydSUheYOL._SX383_BO1,204,203,200_.jpg
+https://m.media-amazon.com/images/I/41Gf-eu+AJL._SX260_.jpg
+
+"""
+
+- $ wget -i images.txt ==> download from a file
+
+- $ wget -c -P kali/ https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso ==> "b" is for download in the background
+- $ tail -f wget-log ==> To se the progress of the download
+- $ CRTL + C ==> stop the process
+- $ pkill wget ==> Killing the process
+
+- $ nohup wget -c -P kali/ https://cdimage.kali.org/kali-2021.1/kali-linux-2021.1-installer-amd64.iso ==> "b" is for download in the background
+
+- $ wget --mirror --convert-links --adjust-extension --page-extension --page-requisites --no-parent http://example.org ==> here you are downloading a webpage to view it witouth internet
+
+## 112. Checking for Listening Ports (netstat, ss, lsof, telnet, nmap)
+
+- $ sudo netstat -tupan ==> Display all open ports
+- $ man netstat
+
+- "-tupan" ==> to show TCP ports
+- "-upan" ==> show UDP ports
+
+- $ sudo netstat -tupan | grep :22 ==> To see if a port is open
+- $ sudo netstat -tupan | grep :80 ==> No output means the port is close
+- $ sudo netstat -tupan | grep sshd
+
+- $ sudo apt install nginx ==> Installin nginx web server
+- $ sudo systemctl status nginx
+
+- $ sudo netstat -tupan | grep :80 ==> The port will be open because we have nginx
+
+- $ ss -tupan ==> "ss" means Socket Statistics. Do the seam as netstat
+- $ lsof ==> list open file
+
+- $ lsof -u rickdevops ==> Files open by a user
+
+- $ sudo lsof -u root
+
+- $ sudo lsof -u ^root ==> "^" is a negation. Files are not open by root
+- $ sudo lsof -c nginx ==> files open by nginx
+
+- $ sudo lsof -iTCP -sTCP:LISTEN ==> files which have open TCP ports
+- $ sudo lsof -iTCP -sTCP:LISTEN -nP ==> files which have open TCP ports
+
+- $ sudo lsof -iTCP:22 -sTCP:LISTEN -nP 
+
+- $ telnet 192.168.1.108 22 ==> To se is a port is open in another machine
+
+- $ telnet google.com 443 ==> This is open
+- $ telnet google.com 22 ==> This is close
+
+- $ sudo apt install nmap ==> It is a professional network scanner
+- $ sudo nmap 192.168.1.108 22 ==> another way to look if the port is open
+- $ sudo nmap 80 linux.com -sV
+
+
+

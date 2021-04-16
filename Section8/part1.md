@@ -48,7 +48,7 @@
 - $ ifconfig
 
 - $ ip address del 192.168.0.111/24 dev enp0s3 ==> remove existing ip address
-- $ ip address del 192.168.0.222/24 dev enp0s3 ==> add new ip address
+- $ ip address add 192.168.0.222/24 dev enp0s3 ==> add new ip address
 
 - $ route -n ==> See the routing tables
 - $ ip route show ==> TO see the defaul gateway
