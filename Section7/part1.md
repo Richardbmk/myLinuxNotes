@@ -1,164 +1,168 @@
-# Section 11: Linux Process Management
+# Section 7: User Account Management
 
-## 87. Processes and The Linux Security Model
+## 65. Understanding passwd and shadow files
 
-- $ type ls ==> To check if a command is an executable command
-- $ type cp
-- $ type cd
-- $ type umask
+- $ ls -l /etc/passwd /etc/shadow
 
-- $ ps -ef | less
-- $ top
+- $ less -l /etc/passwd ==> contain basic information of each user account in the system
 
-## 88. Listing Processes (ps, pstree)
+- $ less -l /etc/shadow ==> it store the actual user password in an encrypted format. 
 
-- commands to find info about the running processes:
-- $ ps
-- $ pgrep
-- $ pstree
-- $ top
+- $ man shadow
+
+- $ useradd user1 ==> create a new user
+- $ passwd user1 ==> create new password for the user
+
+- $ useradd user2 ==> create a new user
+- $ passwd user2 ==> create new password for the user
+
+- $ tail /etc/shadow
+
+## 66. Understanding Linux Groups (groups, id)
+
+- $ touch abc.txt
+- $ ls -l abc.txt
+
+- $ grep root /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+0 ==> User ID
+0 ==> Group ID
+
+- $ grep 0 /etc/group
+
+- $ less /etc/group
+- $ groups ==> list of all groups the user belongs to
+
+- $ groups rickdevops
+- $ groups root
+
+- $ id ==> prints info about the user, groups, ids and more
+
+## 67. Creating User Accounts (useradd)
+
+- $ man useradd
+
+- $ sudo useradd user3
+- $ tail -n 5 /etc/passwd
+
+- $ less /etc/default/useradd
+
+- $ groups u1 ==> list the groups this user belongs
+
+- $ less /etc/login.defs
+
+- $ sudo passwd user3 ==> you need to set the password to login as the new user
+
+- $ sudo useradd -m -d /home/james -c "C++ Developer" -s /bin/bash -G sudo,adm,mail james ==> this create user home directory, the "c" is for adding comments, the "s" add bash shell as a default, the "G" add secundary groups to the user
+
+- $ sudo useradd -r 2022-12-31 user4 ==> this create a user with expiration date
+
+- $ chage -l james
+- $ chage -l user4 ==> you can see the expiration date
+
+- $ less /etc/passwd
+
+
+## 68. Changing and Removing User Accounts (usermod, userdel)
+
+To find info about user:
+- $ less /etc/passwd
+- $ sudo less /etc/shadow
+- $ less /etc/group
+- $ sudo less /etc/gshadow
+- $ less /etc/login.defs
+
+- $ man usermod
+
+- $ sudo usermod -c "Golang developer" james ==> Change the comment of an existing user.
+- $ grep james /etc/passwd
+
+- $ sudo usermod -g deamon james ==> to change the primary group of an user
+
+- $ groups james
+
+- $ sudo groupadd developers ==> adding new group
+- $ sudo groupadd managers ==> adding new group
+
+- $ sudo usermod -G developers,managers james ==> adding james to the new created groups (Now james belong **only** to this new groups)
+- $ groups james
+
+- $ sudo usermod -aG sudo james ==> adding jame to the sudo group. (Now james belong to the sudo groun and more groups)
+- $ groups james
+
+- $ less /etc/passwd
+- $ sudo userdel user4 ==> this delete user4
+- $ sudo userdel -r user4 ==> this delete user4 and his home directory
+- $ grep james /etc/passwd
+- $ ls /home/
+
+## 69. Creating Admin Users
+
+- $ sudo useradd -m -s /bin/bash toor
+- $ grep toor /etc/passwd
+
+- $ sudo passwd toor
+- $ su toor ==> becoming toor user
 - $ id
 
-- $ ps -e ==> Display all process that are running
-- $ ps -f ==> Display full status information
-- $ ps -ef ==> Display all process with detailled information
-- $ ps -ef | wc -l ==> gives the number of all process
+- $ cat /etc/passwd ==> user toor can't do anything ralated with Admin task
+- $ sudo cat /etc/passwd ==> anything ralated with Admin task
 
-- $ ps -ef | less
-- $ man sshd
+- $ id
 
-- $ ps -aux
-- $ ps aux
-- $ ps -aux | less
-- $ ps aux --sort=%mem | less ==> sort by memory ascending oreder
-- $ ps aux --sort=-%mem | less ==> descending order
+- $ sudo usermod -aG sudo toor ==> this give Admin permision
+- $ su toor
 
-- $ ps -f -u student ==> To see all the user student process
-- $ ps -f -u root ==> To see all the user root process
+- $ sudo cat /etc/passwd ==> works fine!
 
-- $ ps -ef | grep sshd ==> To se if a determinat process is currently running
-- $ ps -ef | grep xyz123 ==> You will have an output
+## 70. Group Management (groupadd, groupdel, groupmod)
 
-- $ pgrep sshd ==> to see if a process is running
-- $ pgrep init
-- $ pgrep python3
-- $ pgrep systemd
+- $ sudo groupadd engineering
+- $ tail -3 /etc/group
+- $ cat -3 /etc/group
 
-- $ pgrep -l sshd
-- $ pgrep -l cups
-- $ pgrep -u root sshd
+- $ sudo useradd u1
+- $ sudo useradd -G engineering u2
+- $ groups u3
 
-- $ pstree | less
-- $ pstree -c | less
+- $ sudo usermod -aG engineering u1
+- $ groups u1
 
-## 90. Getting a Dynamic Real-Time View of the Running System (top, htop)
+- $ sudo groupmod -n engineers engineering ==> changind the name of an existing group
+- $ groups u1
+- $ sudo groupdel engineers
 
-- $ top
-- $ man top
+## 71. User Account Monitoring (whoami, who am i, who, id, w, uptime, last)
 
-**INSIDE THE TOP COMMAND:**
+- Real User ID = RUID
+- Efective User ID = EUID
 
-- PRESS Arrow Up ==> move up
-- PRESS Arrow Down ==> mode down
-- PRESS "h" ==> to see a help summary
-- PRESS 1 ==> cpus or numa node views
-- PRESS 't' ===> task/cpu stats
-- PRESS 'm' ===> memory info
-- PRESS 'b' ===> bold/reverse (only if 'x' or 'y')
+- rickdevops i sthe RUID
+- $ sudo su ==> EUID becomes root user
 
-- $ top -d 1 -n 3 -b > top_processes.txt
-  - "d" ==> means the delay (seconds)
-  - "n" ==> means the iterations (nº of iterations)
-  - "b" ==> start/stop in batch mode
-- $ less top_processes.txt
-- $ grep rsyslogd top_processes.txt
+- $ whoami <==> $ id -un
+- $ who ==> Display the name of RUID
+- $ id ==> prints the efective user and its groups
 
-- $ sudo apt update && sudo apt install htop
-- $ htop
+- $ sudo cat /var/run/utmp ==> file that logs current user on the system
+- $ sudo cat /var/log/wtmp ==> histoy of utmp file
+- $ ls -l /var/log/wtmp
+- $ who
 
-## 92. Signals and Killing Processes (kill, pkill, killall, pidof)
-
-- $ kill
-- $ kill -l ==> to get a list of all available signal
-- $ pgrep -l gedit ==> To find the process ID of gedit (the Text Editor)
-- $ kill -2 14804
-
-- $ pidof firefox
-- $ kill -INT (copy and paste all the process ID)
-
-- $ kill -SIGINT $(pidof firefox)
-
+- $ sudo apt install openssh-server
 - $ sudo systemctl status ssh
-- $ sudo systemctl start ssh
-- $ sudo systemctl stop ssh
+- $ ifconfig
+- $ who -H
+- $ who -aH
+- $ w
 
-- $ tail -f /var/log/auth.log ==> ssh deamon in real time
+- $ uptime
+- $ last ==> track user activities. list of last login user
+- $ last student ==> just give info of student
+- $ man last
 
-- $ ls /var/run
-- $ cat /var/run/sshd.pid
-- $ pgrep -l sshd
 
-- $ sudo kill -1 701
-- $ sudo kill -1 $(cat /var/run/sshd.pid)
 
-- $ sleep 123& ==> process or delay the execution for a given seconds
-- $ sleep 321&
 
-- $ killall ==> kills all processes
 
-- $ pgrep -l sleep ==> you will see two sleep process running
 
-- $ killall -15 sleep
-
-- $ sleep 123&
-- $ sleep 321&
-- $ pgrep -l sleep
-
-- $ killall slee ==> will not work with a partial name
-- $ pkill slee ==> it will work with a partial name
-
-## 93. Foreground and Background Processes
-
-- $ sleep 15 ==> A **Foreground** process will start and you can not use the terminal until stops (15 seconds)
-
-- $ sleep 15& ==> A **Background** process will start but you can still use the terminal
-
-- $ ifconfig > output.txt 2> errors.txt &
-- $ cat output.txt
-- $ cat errors.txt
-
-- $ ping -c 1 google.com &
-- $ pint -c 1 google.com > /dev/null 2>&1 &
-- $ pint -c 1 127.0.0.1 > /dev/null 2>&1 &
-
-## 94. Job Control (jobs, fg, bg)
-
-- $ sleep 25&
-- $ sleep 35&
-
-- $ jobs ==> displays the two sleep jobs
-
-- $ jobs -l ==> display the process id also
-
-- $ sleep 10 & ==> This run in the buckground
-- $ josbs
-- $ fg %1 ==> bring the 1 running job to the foreground
-
-- $ sleep 10
-- PRESS CRTL + C
-- $ pgrep -l sleep ==> the process still in the process list
-- $ jobs
-- $ bg %1 ==> resume the process in the background
-
-- $ sleep 432
-- CTRL + C
-- $ jobs
-- $ fg %1 ==> Resume it in the Foreground
-
-- $ nohup sleep 1234 & ==> it will run even if you close the terminal
-- CLOSE THE TERMINAL AND OPEN AGAIN
-- $ pgrep -l sleep ==> still there running
-
-- $ nohup sleep 123 &
-- $ nohup ifconfig &
-- $ cat nohup.out

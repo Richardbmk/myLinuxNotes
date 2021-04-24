@@ -1,168 +1,180 @@
-# Section 7: User Account Management
+# Section 5: The Linux File System
 
-## 65. Understanding passwd and shadow files
+## 25. Intro to The Linux Files System
 
-- $ ls -l /etc/passwd /etc/shadow
+- $ df -h ==> To see the mount point (You can find your USB there for example)
 
-- $ less -l /etc/passwd ==> contain basic information of each user account in the system
+- $ ls /
 
-- $ less -l /etc/shadow ==> it store the actual user password in an encrypted format. 
+## 26. The Filesystem Hierarchy Standard (FHS)
 
-- $ man shadow
+Press [Alt Gr + 4] to get ~ in Linux
 
-- $ useradd user1 ==> create a new user
-- $ passwd user1 ==> create new password for the user
+- $ ls /
+- $ ls ~ <==> ls /home/rickdevops
+- $ ls /root/
+- $ cat /proc/cpuinfo
+- $ cat /proc/meminfo
 
-- $ useradd user2 ==> create a new user
-- $ passwd user2 ==> create new password for the user
+## 27. Absolute vs. Relative Paths. Walking through the File System (pwd, cd, tree)
+--> Explore
+- $ cd     ==> changing the current directory to user's home directory
+- $ cd ~    # => changing the current directory to user's home directory
+- $ cd -    # => changing the current directory to the last directory
+- $ .        ==> the current working directory
+- $ ..       ==> the parent directory
+- $ ~        ==> the user's home directory
+- $ pwd ==> Print Working Directory
+- $ ls
 
-- $ tail /etc/shadow
+Exemple of absolute Path (start with "/")
+- /var/log
+- /etc/
 
-## 66. Understanding Linux Groups (groups, id)
+Exemple of relative Path (start without "/")
 
-- $ touch abc.txt
-- $ ls -l abc.txt
+- $ cat hosts
+- $ cat ./hosts
+- $ ls cron.daily/
 
-- $ grep root /etc/passwd
-root:x:0:0:root:/root:/bin/bash
-0 ==> User ID
-0 ==> Group ID
+- $ ls .. ==> list content of the parent directory
+- $ ls ../..
 
-- $ grep 0 /etc/group
+--> install tree command
+- $ sudo apt install tree
+- $ tree
 
-- $ less /etc/group
-- $ groups ==> list of all groups the user belongs to
+- $ man tree
+- $ tree -d /etc ==> prints only directories
+- $ tree -df /etc ==> prints absolute path
 
-- $ groups rickdevops
-- $ groups root
+## 29. The LS Command In Depth (ls)
 
-- $ id ==> prints info about the user, groups, ids and more
+- $ ls --help
+- $ man ls
+- $ ls
+- $ ls -1 /etc ==> List all the files in one line
+- $ ls /etc/ /var/ ==> you can specify more than one argument
+- $ ls /etc/ /var/ . 
+- $ ls -l
+- $ ls -l /etc/
+- $ ls -ld /etc/ ==> Just display information about etc directory
 
-## 67. Creating User Accounts (useradd)
+--> MEANING OF THE DIRECTORIES
 
-- $ man useradd
+drwxr-xr-x  14 root root      4096 jul 31  2020 var
+lrwxrwxrwx   1 root root         8 feb  4 15:34 sbin -> usr/sbin
+drwxr-xr-x   8 root root      4096 feb  4 16:58 snap
 
-- $ sudo useradd user3
-- $ tail -n 5 /etc/passwd
+- Posible First caracters: "-", "d", "l" (Indicates the file types)
+    + "-" ==> means a Normal file
+    + "d" ==> means a directory
+    + "d" ==> symbolic link (its a shortcut)
+    + "b" ==> indicates block devices
+    + "c" ==> indicates chart devices
+    + "s" ==> indicates socket
+    + "p" ==> indicates name pipe
+- Next 9 caracters: "w", "r", "x", "-", and more (Indicates the file permisions)
+    + "w" ==> permision to write
+    + "r" ==> permision to read
+- Next number (14, 1, 8), is the number of hardlinks
+- Next column (root) is the name of the owner the file
+- Next column (root) is the name of the group owner of the file
+- Next column (4096, 8), is the size of the file (**not real size!, is the size of inodes tructure**)
+- Next column (jul 31  2020) is the modification time
 
-- $ less /etc/default/useradd
+- $ ls -lh ==> this show the file size in human readable format
+- $ ls -al ==> show hidden files and directories
+- $ ls -lS ==> Sort by size
+- du ==> stand for disk usage (yo need root privileges)
+- du -sh /etc/ ==> to see the real size of the directories
+- ls -l -X /etc/ ==> to sort by extension
 
-- $ groups u1 ==> list the groups this user belongs
+- ls --hide=*.conf /etc/ ==> list without showing the files with the .conf extension
+- ls -l --hide=*.conf /etc/
+- ls -lR /etc/ ==> List Recursively (list files in each subdirectories)
+- type ls
+- \ls ==> list but without colors
 
-- $ less /etc/login.defs
+## 31. Understanding File Timestamps: atime, mtime, ctime (stat, touch, date)
 
-- $ sudo passwd user3 ==> you need to set the password to login as the new user
+- $ ls
+- $ stat /etc/passwd ==> show statistics about the file
+- $ ls -l /etc/
+- $ ls -lt /etc/ ==> show a list of directories with the modificaction time
+- $ ls -lu /etc/ ==> show a list of directories with the access time
+- $ ls -lc /etc/ ==> to see the change time
+- $ ls -l --full-time /etc/ ==> this show the full time
+- $ pwd ==> show content of the current directory
 
-- $ sudo useradd -m -d /home/james -c "C++ Developer" -s /bin/bash -G sudo,adm,mail james ==> this create user home directory, the "c" is for adding comments, the "s" add bash shell as a default, the "G" add secundary groups to the user
+--> Updating time of a file
+- $ touch linux.txt
+- $ ls -l linnux.txt ==> look for the modification time
+- $ stat linux.txt
+- $ touch "learning linux.txt" ==> to write files with white space
 
-- $ sudo useradd -r 2022-12-31 user4 ==> this create a user with expiration date
+- $ touch linux.txt
+- $ stat linux.txt
+- $ touch -a linux.txt ==> change only the access timestamp
+- $ stat linux.txt
 
-- $ chage -l james
-- $ chage -l user4 ==> you can see the expiration date
+- $ touch -m linux.txt ==> change only the modification timestamp
+- $ stat linux.txt
 
-- $ less /etc/passwd
+- $ date
 
+- $ touch -m -t 201812301430.45 linux.txt
+- $ stat linux.txt
 
-## 68. Changing and Removing User Accounts (usermod, userdel)
+- $ touch -d "2010-10-31 15:45:45" linux.txt
+- $ stat linux.txt
 
-To find info about user:
-- $ less /etc/passwd
-- $ sudo less /etc/shadow
-- $ less /etc/group
-- $ sudo less /etc/gshadow
-- $ less /etc/login.defs
+--> Set the timestamp of a file to the same value to another one file
 
-- $ man usermod
+- $ touch ubuntu.txt
+- $ touch linux.txt -r ubuntu.txt
+- $ stat linux.txt
+- $ stat ubuntu.txt
 
-- $ sudo usermod -c "Golang developer" james ==> Change the comment of an existing user.
-- $ grep james /etc/passwd
+--> EXPLORE
+- $ date
+- $ date -u
+- $ man date
 
-- $ sudo usermod -g deamon james ==> to change the primary group of an user
-
-- $ groups james
-
-- $ sudo groupadd developers ==> adding new group
-- $ sudo groupadd managers ==> adding new group
-
-- $ sudo usermod -G developers,managers james ==> adding james to the new created groups (Now james belong **only** to this new groups)
-- $ groups james
-
-- $ sudo usermod -aG sudo james ==> adding jame to the sudo group. (Now james belong to the sudo groun and more groups)
-- $ groups james
-
-- $ less /etc/passwd
-- $ sudo userdel user4 ==> this delete user4
-- $ sudo userdel -r user4 ==> this delete user4 and his home directory
-- $ grep james /etc/passwd
-- $ ls /home/
-
-## 69. Creating Admin Users
-
-- $ sudo useradd -m -s /bin/bash toor
-- $ grep toor /etc/passwd
-
-- $ sudo passwd toor
-- $ su toor ==> becoming toor user
-- $ id
-
-- $ cat /etc/passwd ==> user toor can't do anything ralated with Admin task
-- $ sudo cat /etc/passwd ==> anything ralated with Admin task
-
-- $ id
-
-- $ sudo usermod -aG sudo toor ==> this give Admin permision
-- $ su toor
-
-- $ sudo cat /etc/passwd ==> works fine!
-
-## 70. Group Management (groupadd, groupdel, groupmod)
-
-- $ sudo groupadd engineering
-- $ tail -3 /etc/group
-- $ cat -3 /etc/group
-
-- $ sudo useradd u1
-- $ sudo useradd -G engineering u2
-- $ groups u3
-
-- $ sudo usermod -aG engineering u1
-- $ groups u1
-
-- $ sudo groupmod -n engineers engineering ==> changind the name of an existing group
-- $ groups u1
-- $ sudo groupdel engineers
-
-## 71. User Account Monitoring (whoami, who am i, who, id, w, uptime, last)
-
-- Real User ID = RUID
-- Efective User ID = EUID
-
-- rickdevops i sthe RUID
-- $ sudo su ==> EUID becomes root user
-
-- $ whoami <==> $ id -un
-- $ who ==> Display the name of RUID
-- $ id ==> prints the efective user and its groups
-
-- $ sudo cat /var/run/utmp ==> file that logs current user on the system
-- $ sudo cat /var/log/wtmp ==> histoy of utmp file
-- $ ls -l /var/log/wtmp
-- $ who
-
-- $ sudo apt install openssh-server
-- $ sudo systemctl status ssh
-- $ ifconfig
-- $ who -H
-- $ who -aH
-- $ w
-
-- $ uptime
-- $ last ==> track user activities. list of last login user
-- $ last student ==> just give info of student
-- $ man last
+## 32. Sorting Files by Timestamp
+- $ ls -l ==> Sort by name and alphabetic order
+- $ ls -lt ==> Sort by modification files. Newest files come first
+- $ ls -ltu ==> Sorting and showing by access time
+- $ ls -lu ==> Show the access file and sort by name. Alphabetic order
+- $ ls -lu -r <==> $ ls -lu --reverse ==> The "-r" just reverse the order
+- $ ls -ltur <==> $ ls -ltu --reverse
 
 
+## 33. File Types in Linux (ls -F, file)
 
+- $ file Desktop/linux.jpeg ==> gives info about a file
+- $ mv ~/Desktop/linux.jpeg ~/Desktep/linux.png
+- $ file Desktop/linux.png ==> gives info about a file
 
+See example of a block device
+- ls -l /dev/sda1
 
+See example of a chart device
+- ls -l /dev/
 
+See example of a socket
+- ls -l /run/
+
+Another way of classifying files
+- $ ls -F ==> Give info of the type of file at the end of the name
+- $ ls -F /etc/
+
+- symbols at the en of a file:
+    - "@" ==> Indicates symbolic links
+    - "=" ==> Indicates socket
+    - "/" ==> directory
+    - "|" ==> name pipe
+
+If this is cofusing, you can figure out the file type using the command "file"
+- file /etc/vtrgb ==> give info about the file
+- file run/* ==> gives info of all of the files inside run directory

@@ -1,77 +1,123 @@
-# Secction 16: Challenges - Software Management
+# Secction 10: Challenges - File Permissions
 
-## Challenges - dpkg, apt
+## Challenges - File Permissions
+
+Create a directory with a regular file in it. Work as a non-privileged user.
+
+- $ mkdir linux
+- $ echo "This is Ubuntu" > linux/ubuntu.txt
+- $ tree linux/
 
 #### Challenge #1
 
-1. Download the Google Earth package (.deb) for Ubuntu from this address: https://www.google.com/intl/en_in/earth/versions/
+1. Display the permissions of ubuntu.txt
 
-Do it manually going to the home page
+- $ stat linux/ubuntu.txt
+- $ ls -ld linux/ubuntu.txt
 
-2. Install the app using the locally downloaded .deb file and dpkg
+2. Remove all permissions of others.
 
-- $ sudo dpkg -i google-earth-stable_current_amd64.deb
+- $ chmod 660 linux/ubuntu.txt <=THE SAME=> $ chmod o-rwx linux/ubuntu.txt
+- $ ls -ld linux/ubuntu.txt 
 
-3. Start the application.
+#### Challenge #2
 
-just open the google chome
+1. Remove the read permission of ubuntu.txt for the owner and check if the owner can read the file.
 
-## Challenge #2
+- $ chmod u-r linux/ubuntu.txt
+- $ cat linux/ubuntu.txt
 
-1. Remove the Google Earth application using dpkg
+#### Challenge #3
 
-- $ dpkg-query -l | grep earth
-- $ sudo dpkg -r google-earth-stable_current_amd64.deb ==> Just the app
-- $ sudo dpkg -P google-earth-stable_current_amd64.deb ==> Te app and files
+1. Using the octal notation, set the permissions of the directory to rwxrwx--- and of the file to rw-r-----
 
-2. Install Google Earth again using apt and the deb file.
+- $ chmod 770 linux/
+- $ chmod 640 linux/ubuntu.txt
 
-- $ sudo apt install ./google-earth-stable_current_amd64.deb
+#### Challenge #4
 
-## Challenge #3
+1. Set the permissions of the directory to 0667. Check if the user (owner) can list its contents, move to the directory and remove it.
 
-1. Display all installed applications using dpkg
+- $ chmod 0667 linux/
+- $ ls -ld linux/
+- $ ls -l linux/
+- $ tree linux/
+- $ cd linux/
+- $ rm -rf linux/ubuntu.txt
 
-- $ dpkg-query -l
-- $ dpkg --get-selections
+#### Challenge #5
 
-2. Take any linux command and check to which package it belongs.
+1. Set the permissions of all the files in the user's home directory to 0640 and the permissions of all directories to 0750.
 
-- $ which -a ls
-- $ dpkg -S /bin/ls
+- $ find ~ -type f -exec chmod 0640 {} \;
+- $ find ~ -type d -exec chmod 0750 {} \;
 
-3. List all other files from that package
+#### Challenge #6
 
-- $ dpkg-query -L | grep coreutils
+1. As a non-privileged user list the contents of /root using the ls command. See what will happen.
+- $ id
+- $ ls -l /root
 
-## Challenge #4
+2. As root set SUID to ls and list the contents of /root again as a non-privileged user.
 
-1. Install the nginx web server using apt.
-
-- $ sudo apt update && sudo apt install nginx
-
-2. Start and check the service by connecting to localhost using the browser.
-
-- $ systemctl start nginx
-
-3. Remove the web server.
-
-- $ sudo apt purge nginx -y ==> Is better to use purge!!
-
-## Challenge #5
-
-1. Search for a package named squid in the official repositories and display information about it.
-
-- $ apt list | grep squid
-- $ apt show squid
+- $ which ls
+- $ ls -l /usr/bin/ls
+- $ sudo chmod 4755 usr/bin/ls
+- $ ls -l /usr/bin/ls
 
 
-## Challenge #6
 
-1. List all upgradable applications.
+3. Check the SUID permission set on ls
 
-- $ sudo apt list --upgradable
+- $ ls -la /root/
+- $ ls -ld usr/bin/ls
 
-2. Upgrade all applications assuming yes to each prompt.
 
-- $ sudo apt full-upgrade -y
+4. As root remove the SUID bit.
+
+- $ id
+- $ sudo chmod u-s usr/bin/ls
+OR
+- $ sudo chmod 0755 usr/bin/ls
+
+#### Challenge #7
+
+1. Set the directory permissions to 0777 and the file permissions to 0000. As another non-privileged user, try to remove the file.
+
+- $ chmod 0777 linux/
+- $ chmod 0000 linux/ubuntu.txt
+
+- $ ls -ld linux/
+- $ ls -l linux/
+
+- $ id
+- $ su rick
+- $ rm -rf linux/ubuntu.txt
+- $ ls linux/
+
+2. Create a new file in the directory and set its permissions to 0644.
+
+- $ touch linux/newFile
+- $ chmod 0644 linux/newFile
+
+3. Set the Sticky Bit on the directory.
+
+- $ sudo chmod 1777 linux/
+- $ ls -ld linux/
+
+4. As another non-privileged user, try to remove the file.
+
+- $ id
+- $ su Richard
+- $ ls linux/
+- $ rm -rf linux/newFile
+
+#### Challenge #8
+
+1. Change the owner and the group owner of all files in the current user home directory to the current user and its primary group.
+
+- $ id 
+- $ sudo chown -R student:student ~
+
+
+
