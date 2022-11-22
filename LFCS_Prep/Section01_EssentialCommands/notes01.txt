@@ -1,3 +1,128 @@
 # Essential Commands
 
-## Log into local & remote graphical and text mode consoles
+## Lab Resources: Logging in and System Documentation
+$ ip a
+$ ssh aaron@192.168.0.17
+
+$ ls --help
+$ journalctl --help
+$ man journalctl 
+
+$ man man 
+$ man 1 printf
+$ man 3 printf
+
+$ apropos director
+$ sudo mandb
+$ apropos -s 1,8 director
+
+$ systemctl + TAB
+$ systemctl + TAB + TAB
+$ ls /usr/ + TAB + TAB
+
+## Lab Resources: Logging in and System Documentation
+- Relative Path vs Absolute Pat
+$ ls -alh
+$ pwd
+$ cd /
+$ cd -
+$ cd
+
+$ touch home.txt
+$ mkdir Receipts
+$ cp [source] [destination]
+$ cp -r [source] [destination]
+$ mv [source] [destination]
+$ rm file.txt
+$ rm -r Receipts/
+
+- Hard link and Soft links
+$ echo "Picture of Milo the dog" > Pictures/family_dog.jpg
+$ stats Pictures/family_dog.jpg
+
+$ ln path_to_target_file path_to_link_file
+
+$ useradd -a -G family aaron
+$ chmod 660 /home/aaron/Pictures/family_dog.jgp
+
+$ ls -s path_to_target_file path_to_link_file
+$ readlink path_to_link_file
+
+## List, set, and change standard file permissions
+
+$ ls -l
+$ chgrp wheel family_dog.jpg
+$ groups
+
+$ sudo chown jane family_dog.jpg
+$ sudo chown aaron:family family_dog.jpg
+$ chmod u+w family_dog.jpg
+$ chmod u-w family_dog.jpg
+$ chmod g=r family_dog.jpg
+$ chmod g=rw family_dog.jpg
+$ chmod g= family_dog.jpg
+$ chmod g-rwx family_dog.jpg
+$ chmod u+rw,g=r,o= family_dog.jpg
+$ chmod u=rw,g-w family_dog.jpg
+
+## SUID, SGID, and Sticky Bit
+
+$ stat family_dog.jpg
+$ chmod 640 family_dog.jpg
+
+$ chmod 4664 suidfile
+$ chmod 4764 suidfile
+
+$ chmod 2664 sgidfile
+$ chmod 2674 sgidfile
+
+$ find . -perm /4000
+$ find . -perm /2000
+
+$ chmod 6664 both
+
+$ find . -perm /6000
+
+$ mkdir stickydir
+$ ls -ld stickydir
+$ chmod +t stickydir
+$ chmod 1777 stickydir
+$ ls -ld stickydir
+$ chmod 1666 stickydir
+
+$ ls -ld stickydir
+
+## Search for files
+
+$ find /usr/share/ -name ".jpg"
+$ find /lib64/ -size +10M
+$ find /dev/ -mmin -1
+
+$ find [/path/to/directory] [search_parameters]
+$ find /bin/ -name file1.txt
+$ find -name file1.txt
+
+$ find -name felix
+$ find -iname felix
+$ find -name "f*"
+
+$ find -name "f*" -size 512k
+$ find -name "f*" -o -size 512k
+
+$ find -not -name "f*"
+$ find \! -name "f*"
+
+$ find -perm 664
+$ find -perm u=rw,g=rw,o=r
+
+$ find -perm 664
+$ find -perm -u=rw,g=rw,o=r
+
+$ find -perm /664
+$ find -perm /u=rw,g=rw,o=r
+
+$ find -perm 600
+$ find -perm -100
+$ find \! -perm -o=r
+$ find -perm /u=r,g=r,o=r
+
