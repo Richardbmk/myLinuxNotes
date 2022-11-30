@@ -126,3 +126,87 @@ $ find -perm -100
 $ find \! -perm -o=r
 $ find -perm /u=r,g=r,o=r
 
+# Labs solutions:
+$ sudo find /var/log/ -perm -g=w ! -perm /o=rw > /home/bob/data.txt
+$ chmod u+s,g+s,o+t /home/bob/datadir
+$ sudo find /usr -type f -size +5M -size -10M > /home/bob/size.txt
+
+# Lab Notes: File content, regular expressions
+
+$ cat /home/users.txt
+$ tac /home/users.txt
+
+$ tail -n 20 /var/log/dfn.log
+$ head /var/log/dfn.log
+$ head /var/log/dfn.log
+
+$ sed 's/canda/canada/g' userinfo.txt
+$ sed 's/canda/canada/' userinfo.txt
+$ sed -i 's/canda/canada/g' userinfo.txt
+
+$ cut -d ' ' -f 1 userinfo.txt
+$ cut -d ',' -f 3 userinfo.txt > new-file.txt
+
+$ uniq countries.txt
+$ sort countries.txt 
+$ sort countries.txt | uniq
+
+$ diff file1 file2
+$ diff -c file1 file2
+$ diff -y file1 file2 = sdiff file1 file2
+
+$ less /var/log/dnf.log
+    /debug (PRESS N)
+        PRESS - i
+        SHIFT + N
+
+$ more /var/log/dnf.log
+    space bar
+
+$ vim
+    :/this\c
+    :3
+    'dd'---> to cut a line
+$ grep 'CentOS' /etc/os-release
+$ grep -i 'centos' /etc/os-release
+$ grep -r 'Centos' /etc/
+$ sudo grep -ir 'centos' /etc/os-release
+$ grep -i 'red' /etc/os-release
+$ grep -wi 'red' /etc/os-release
+$ grep -oi 'red' /etc/os-release
+
+$ cat names.txt
+$ grep 'sam' names.txt
+$ grep '^sam' names.txt
+$ grep '^PASS' /etc/login.defs
+$ grep 'sam$' names.txt
+$ grep '7$' /etc/login.defs
+$ grep 'mail$' /etc/login.defs
+$ grep -r 'c.t' /etc/
+$ grep -wr 'c.t' /etc/
+$ grep '\.' /etc/login.defs
+$ grep -r 'let*' /etc/
+$ grep -r '/.*/' /etc/
+$ grep -r '0\+' /etc/
+
+$ grep Er '0+' /etc/
+$ egrep -r '0{3, }' /etc/
+$ egrep -r '10{,3}' /etc/
+$ egrep -r '0{3}' /etc/
+$ egrep -r 'disabled?' /etc/  
+$ egrep -r '0{3,5}' /etc/  
+$ egrep -r 'enabled|disabled' /etc/  
+$ egrep -r 'enabled?|disabled?' /etc/  
+$ egrep -r 'c[au]t' /etc/  
+$ egrep -r '/dev/[a-z]*' /etc/  
+$ egrep -r '/dev/[a-z]*[0-9]' /etc/  
+$ egrep -r '/dev/[a-z]*[0-9]?' /etc/  
+$ egrep -r '/dev/([a-z]*[0-9]?)*' /etc/  
+$ egrep -r '/dev/([a-z]*[0-9]?)*' /etc/  
+$ egrep -r egrep -r '/dev/(([a-z]|[A-Z])*[0-9]?)*' /etc/
+$ egrep -r 'http[^s]' /etc/  
+$ egrep -r '/[^a-z]' /etc/  
+
+----> https://regexr.com
+
+
