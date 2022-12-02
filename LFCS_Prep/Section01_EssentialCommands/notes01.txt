@@ -209,4 +209,8 @@ $ egrep -r '/[^a-z]' /etc/
 
 ----> https://regexr.com
 
+### During Lab
+$ sed -i 's/disabled/enabled/gi' /home/bob/values.conf
+$ sed -i '500,2000s/enabled/disabled/g' values.conf
+$ sed -i 's~#%$2jh//238720//31223~$2//23872031223~g' /home/bob/data.txt
 
