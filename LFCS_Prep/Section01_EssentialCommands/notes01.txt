@@ -214,3 +214,85 @@ $ sed -i 's/disabled/enabled/gi' /home/bob/values.conf
 $ sed -i '500,2000s/enabled/disabled/g' values.conf
 $ sed -i 's~#%$2jh//238720//31223~$2//23872031223~g' /home/bob/data.txt
 
+
+# Lab Archive Backup Compress IO Redirection
+
+$ tar --list --file archive.tar  <==> $ tar -tf archive.tar   <==> tar tf archive.tar
+$ tar --create --file archive.tar file1 <==> tar cf archive.tar file1
+$ tar --append --file archive.tar file2 <==> tar rf archive.tar file2
+$ tar --extract --file archive.tar <==> tar xf archive.tar
+$ tar --extract --file archive.tar --directory /tmp/
+    $ tar xf archive.tar -C /tmp/
+$ sudo tar --extract --file archive.tar --directory /tmp/
+
+$ gzip file1 --> file1.gz <==> $ gunzip file1.gz <==> gzip --descompress file1.gz
+$ bzip2 file2 --> file2.bz2 <==> $ bunzip file2.bz2 <==> bzip2 --descompress file2.bz2
+$ xz file3 --> file3.xz <==> $ unxz file3.xz <==> xz --descompress file3.xz
+
+$ gzip --help
+$ gzip --keep file1
+$ bzip2 --keep file2
+$ xz --keep file3
+$ gzip --list file1
+
+$ zip archive file1 <==> zip archive.zip file1
+$ zip -r archive.zip Pictures/
+$ unzip archive.zip
+
+$ tar --create --file archive.tar file1
+$ gzip archive.tar 
+$ gzip --keep archive.tar
+$ tar --create --gzip --file archive.tar.gz file1
+    $ tar czf archive.tar.gz file1
+
+$ tar --create --bzip2 --file archive.tar.bz2 file1
+    $ tar cjf archive.tar.bz2 file1
+
+$ tar --create --xz --file archive.tar.xz file1
+    $ tar cJf archive.tar.xz file1
+
+$ tar --create --autocompress --file archive.tar.gz file1
+    $ tar caf archive.xz file1
+$ tar xf archive.tar.gz file1
+
+$ rsync -a Pictures/ aaron@9.9.9.9.9:/home/aaron/Pictures/
+$ rsync -a <source> <destination>
+$ rsync -a aaron@9.9.9.9.9:/home/aaron/Pictures/ Pictures/ 
+$ rsync -a Pictures/ /Backups/Pictures/
+$ sudo dd if=/dev/vda of=diskimage.raw bs=1M status=progress
+    dd= data disk
+    if= input file
+    of= output file
+    bs= block size
+
+$ cat file.txt
+$ sort file.txt
+$ sort file.txt > sortedfile.txt
+
+$ date
+$ date >> file.txt
+$ date > file.txt <==> date 1> file.txt
+
+stdin = standard input
+stdout = standard output ---> 1>
+stderr = standard error ----> 2>
+
+$ grep -r '^The' /etc/
+$ grep -r '^The' /etc/ 2>/dev/null
+$ grep -r '^The' /etc/ 1>>output.txt 2>>errors.txt --> Append
+$ grep -r '^The' /etc/ 1>output.txt  2>errors.txt ---> overwrite
+$ grep -r '^The' /etc/ > all-output.txt 2>&1
+$ grep -r '^The' /etc/ 1> all-output.txt 2>&1
+
+$ sort << EOF
+...
+...
+...
+> EOF
+
+$ bc <<< 1+2+3+4
+
+$ grep -v '^#' /etc/login.defs
+$ grep -v '^#' /etc/login.defs | sort
+$ grep -v '^#' /etc/login.defs | sort | column -t
+
