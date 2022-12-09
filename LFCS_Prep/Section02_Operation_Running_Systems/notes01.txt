@@ -1,0 +1,33 @@
+# Boot, reboot, and shutdown a system safely
+
+$ systemctl reboot 
+$ sudo systemctl reboot
+$ sudo systemctl poweroff
+$ sudo systemctl reboot --force
+$ sudo systemctl poweroff --force
+$ sudo systemctl poweroff --force --force
+$ sudo systemctl reboot --force --force
+
+$ sudo shutdown 02:00
+$ sudo shutdown +15
+$ sudo shutdown -r 2:00
+$ sudo shutdown -r +15
+$ sudo shutdown -r +1 "reboot for work"
+
+$ systemctl get-default
+$ sudo systemctl set-default multi-user.target
+$ sudo systemctl reboot
+$ sudo systemctl isolate graphical.target
+
+$ sudo systemctl isolate emergency.target
+$ sudo systemctl isolate rescue.target
+$ sudo systemctl set-default graphical.target
+
+$ grub2-mkconfig -o /boot/grub2/grub.cfg
+$ lsblk
+$ grub2-install /dev/sda
+
+$ dnf reinstall grub2-efi grub2-efi-modules shim
+$ sudo vim /etc/default/grub
+$ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+$ sudo grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
