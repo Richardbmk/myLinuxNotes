@@ -31,3 +31,70 @@ $ dnf reinstall grub2-efi grub2-efi-modules shim
 $ sudo vim /etc/default/grub
 $ sudo grub2-mkconfig -o /boot/grub2/grub.cfg
 $ sudo grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
+
+$ sudo shutdown -c
+
+# Lab: Scripting, manage startup process and services
+
+$ touch script.sh
+$ vim script.sh
+
+$ chmod u+x script.sh
+$ chmod +x script.sh
+$ ./script.sh
+
+$ cat /tmp/script.log
+
+$ help
+
+$ vim archive-dnf.sh
+$ chmod +x archive-dnf.sh
+$ ./archive-dnf.sh
+
+$ ls /tmp/
+$ tar tf /tmp/archive.tar.gz
+
+$ help if 
+$ help test
+
+$ vi archive-dnf-2.sh
+
+$ chmod +x archive-dnf-2.sh
+$ ./archive-dnf-2.sh
+$ ls /tmp/
+
+$ vim check-grub-timeout.sh
+$ chmod +x check-grub-timeout.sh
+$ ./check-grub-timeout.sh
+
+$ cat /etc/cron.hourlv/0anacron
+
+$ man systemd.service
+$ systemctl cat sshd.service
+$ sudo systemctl edit --full sshd.service
+$ sudo systemctl revert sshd.service
+
+$ sudo systemctl status sshd.service
+$ sudo systemctl stop sshd.service
+$ sudo systemctl start sshd.service
+
+$ sudo systemctl restart sshd.service
+$ sudo systemctl reload sshd.service
+$ sudo systemctl reload-or-restart sshd.service
+
+$ sudo systemctl disable sshd.service
+$ sudo systemctl status sshd.service
+$ sudo systemctl is-enable sshd.service
+$ sudo systemctl enable sshd.service
+
+$ sudo systemctl enable sshd.service
+$ sudo systemctl start sshd.service 
+    --> sudo systemctl enable-now sshd.service
+$ sudo systemctl disable --now sshd.service
+
+$ sudo systemctl mask atd.service
+$ sudo systemctl enable atd.service
+$ sudo systemctl start atd.service 
+$ sudo systemctl unmask atd.service
+
+$ sudo systemctl list-units --type service --all
