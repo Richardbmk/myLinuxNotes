@@ -296,3 +296,17 @@ $ grep -v '^#' /etc/login.defs
 $ grep -v '^#' /etc/login.defs | sort
 $ grep -v '^#' /etc/login.defs | sort | column -t
 
+# During labs Notes
+$ sudo tar --create --file logs.tar  /var/log/
+
+$ sudo tar czf logs.tar.gz /var/log/
+    $ sudo tar czfP logs.tar.gz /var/log/
+
+$ tar --extract --file /home/bob/archive.tar.gz --directory /tmp/
+    $ tar xf /home/bob/archive.tar.gz -C /tmp
+
+$ sudo ./script.sh 1> /home/bob/output_stdout.txt
+
+$ tar ckjfP file.txt.bz2 /home/bob/file.txt
+$ sudo tar xf archive.tar.gz -C /opt
+$ sort -du /home/bob/values.conf > /home/bob/values.sort
