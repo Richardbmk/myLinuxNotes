@@ -98,3 +98,107 @@ $ sudo systemctl start atd.service
 $ sudo systemctl unmask atd.service
 
 $ sudo systemctl list-units --type service --all
+
+# Lab: Manage Processes and Analyze Log Files
+
+$ ps -a 
+$ ps a
+$ ps 
+
+$ ps aux
+$ man ps
+    /EXAMPLE
+
+$ top
+$ ps 1
+$ ps u 1
+$ ps -U aaron
+$ ps u -U aaron
+
+$ pgrep -a syslog
+$ nice -n 11 bash
+$ ps fax
+$ ps faux
+$ exit
+
+$ ps l
+$ nice -12 bash
+$ exit
+
+$ sudo nice -n -12 bash
+$ ps lax
+$ ps lax | grep "\-12"
+
+$ bash
+$ ps fax
+$ sudo renice 7 8209s
+$ exit
+
+$ kill -L
+$ systemctl status sshd.service
+$ kill -SIGHUP 1147
+$ sudo kill -SIGHUP 1147
+$ sudo kill -SIGHUP <process_number>
+$ sudo kill -KILL <process_number>
+$ sudo kill -9 <process_number>
+
+$ pgrep -a bash
+$ pkill -KILL bash
+
+$ sleep 180
+
+$ vim /etc/hostname
+$ fg
+$ CTRL + Z
+
+$ sleep 300 &
+$ jobs
+$ fg 1
+$ CTRL + Z
+$ jobs
+$ bg 1
+
+$ fg 1
+$ pgrep -a bash
+$ lsof -p 8401
+$ lsof -p 1
+$ sudo lsof -p 1
+
+$ lsof /var/log/messages
+$ sudo lsof /var/log/messages
+
+
+$ ls /var/
+$ su
+
+$ sudo --login
+
+$ grep -r 'ssh' /var/log/
+
+$ less /var/log/secure/
+$ less /var/log/messages/
+
+$ ls /var/log/
+
+$ tail -F /var/log/secure/
+
+$ which sudo
+
+$ journalctl /bin/sudo/
+$ journalctl -u sshd.service
+$ journalctl
+
+$ journalctl -f
+$ journalctl -p [TAB] [TAB]
+
+$ journalctl -p info -g '^b'
+$ journalctl -S 02:00
+$ journalctl -S 01:00 -U 02:00
+$ journalctl -S '2021-11-16 12:04:55'
+$ journalctl -b 0
+$ journalctl -b -1
+
+$ mkdir /var/log/journalctl 
+
+$ last
+$ lastlog
