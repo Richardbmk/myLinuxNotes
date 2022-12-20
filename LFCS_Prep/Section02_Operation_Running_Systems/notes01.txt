@@ -202,3 +202,9 @@ $ mkdir /var/log/journalctl
 
 $ last
 $ lastlog
+
+# During the labs
+
+$ sudo journalctl --unit=sshd.service -n 20 --no-pager
+$ pgrep -a rpcbind
+$ sudo grep -r 'reboot' /var/log/ > reboot.log
