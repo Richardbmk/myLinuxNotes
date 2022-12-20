@@ -1,5 +1,74 @@
 # Schedule tasks to run at a set date and time
 
+$ cat /etc/crontab
+    35 6 * * * root /bin/some_command --some_options
+    ---------- INFO -------------------------------
+    * = match all possible values (i.e., every hour)
+    , = match multiple values (i.e., 15,45)
+    - = range of values (i.e., 2-4)
+    / = specifies steps (i.e., */4), (0-8/4)
+
+$ which touch 
+$ crontab -e 
+    35 6 * * * /usr/bin/touch test_passed
+
+$ crontab -l 
+$ sudo crontab -l 
+$ sudo crontab -e -u jane
+$ crontab -r
+$ sudo crontab -r -u jane
+    -------- INFO ---------
+    daily = /etc/cron.daily/
+    hourly = /etc/cron.hourly/
+    monthly = /etc/cron.monthly
+    weekly = /etc/cron.weekly
+
+$ touch shellscript
+$ sudo cp shellscript /etc/cron.hourly
+$ sudo chmod +rx /etc/cron.hourly/shellscript
+$ sudo rm /etc/cron.hourly/shellscript
+
+$ sudo vim /etc/anacrontab
+    3       10      test-job        /usr/bin/touch      /root/anacrontab_created_this
+    @weekly 10      test-job        /usr/bin/touch      /root/anacrontab_created_this
+
+$ anacron -T
+
+$ at 15:00
+$ CTRL + D
+$ at 'August 20 2022'
+$ at '2:30 August 20 2022'
+$ at 'now + 30 minutes'
+$ at 'now + 3 hours'
+$ at 'now + 3 days'
+$ at 'now + 3 weeks'
+
+$ atq
+$ at -c 20
+$ atrm 20
 
 
 # Verify completion of scheduled jobs
+
+$ sudo cat /var/log/cron
+$ crontab -r 
+$ sudo grep CMD /var/log/cron
+
+$ cat /etc/crontab
+$ sudo vim /etc/anacrontab
+$ sudo anacron -n 
+$ sudo grep anacron /var/log/cron
+$ sudo grep anacron /var/log/cron | less
+$ sudo grep test_job /var/log/cron
+
+$ sudo vi /et/anacrontab
+    1   10  test_job    /bin/echo   "Testing anacron"   |   systemctld-cat  --identifier=test_job
+
+$ sudo anacron -n -f
+$ journalctl -e
+
+$ at 'now + 1 minute'
+    echo "My at job produced this output" | systemd-cat --identifier=at_scheduled_backup
+CTRL + D
+$ sudo grep atd /var/log/cron
+$ journalctl | grep at_scheduled_backup
