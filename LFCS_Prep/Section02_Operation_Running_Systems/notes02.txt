@@ -72,3 +72,43 @@ $ at 'now + 1 minute'
 CTRL + D
 $ sudo grep atd /var/log/cron
 $ journalctl | grep at_scheduled_backup
+
+
+# Lab: Update, manage software, identify component (Centos Machines)
+
+$ dnf check-upgrade
+$ sudo dnf upgrade
+$ sudo dnf repolist
+$ sudo dnf repolist -v
+
+$ sudo dnf repolist --all
+$ sudo dnf config-manager --anable powertools
+$ sudo dnf config-manager --disable powertools
+
+$ sudo dnf search web server
+$ sudo dnf search 'web server'
+
+$ sudo dnf info nginx
+$ sudo dnf install nginx
+$ sudo dnf reinstall nginx
+$ sudo dnf remove nginx
+
+$ sudo dnf remove libcurl
+
+$ sudo dnf group list
+$ sudo dnf install 'Server with GUI'
+$ sudo dnf group install --with-optional 'Server with GUI'
+$ sudo dnf group remove 'Server with GUI'
+
+$ sudo dnf group list --hidden 
+$ wget <url>.rpm 
+$ sudo dnf install ./<name>.rpm 
+$ sudo dnf autoremove
+$ sudo dnf history
+$ sudo dnf [TAB] [TAB] y
+
+$ dnf provides /etc/anacrontab
+$ sudo rm /etc/anacrontab
+$ dnf reinstall cronie-anacron
+$ dnf repoquery --list nginx
+$ dnf repoquery -l nginx | grep conf
