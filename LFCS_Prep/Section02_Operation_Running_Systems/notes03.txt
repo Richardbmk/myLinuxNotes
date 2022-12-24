@@ -18,3 +18,40 @@ $ sudo pkill chronyd
 $ sudo systemctl list-dependencies
 $ sudo systemctl status chronyd.service
 $ sudo systemctl start chronyd.service
+
+# Change kernel runtime parameters, persistent and non-persistent
+
+$ systcl -a
+$ sudo sysctl -a
+$ sudo sysctl -w net-ipv6.conf.default.disable_ipv6=1
+$ sudo sysctl net-ipv6.conf.default.disable_ipv6
+
+$ sudo man sysctl.d
+
+$ sudo sysctl -a | grep vm
+
+$ sudo vi /etc/sysctl.d/swap-less.conf 
+    vm.swapiness=29
+
+$ sudo sysctl -p /etc/sysctl.d/swap-less.conf
+
+# List and Identify SELinux/AppArmor file and process contexts
+
+$ ls -l
+$ ls -Z
+
+unconfined_u:object_r:user_home_t:s0
+    user        role    type      level
+
+$ ps axZ
+$ ls -Z /usr/sbin/sshd
+$ id -Z
+$ sudo semanage login -l 
+$ sudo semanage user -l
+
+$ getenforce
+
+$ sudo chcon -t httpd_sys_content_t /var/index.html
+
+$ setenforce --help
+$ sudo setenforce Permissive
