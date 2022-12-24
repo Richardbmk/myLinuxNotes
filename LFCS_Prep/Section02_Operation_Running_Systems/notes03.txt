@@ -1,0 +1,20 @@
+# Verify the integrity and availability of resources
+
+$ df 
+$ df -h 
+
+$ du -sh /bin/
+$ free -h
+
+$ uptime
+$ lscpu
+$ lspci
+
+$ sudo xfs_repair -v /dev/vdb1
+$ sudo fsck.ext4-v -f -p /dev/vdb2
+
+$ sudo systemctl list-dependencies 
+$ sudo pkill chronyd
+$ sudo systemctl list-dependencies
+$ sudo systemctl status chronyd.service
+$ sudo systemctl start chronyd.service
