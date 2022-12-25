@@ -1,0 +1,84 @@
+# Create, delete, and modify local user accounts
+
+$ sudo useradd john
+$ ls -a /etc/skel
+
+$ useradd --defaults ==> useradd -D
+$ cat /etc/login.defs
+
+$ sudo passwd john
+
+$ sudo userdel john
+
+$ sudo userdel --remove john ==> sudo userdel -r john
+$ sudo useradd -s /bin/othershell -d /home/otherdirectory/ john
+$ sudo useradd -s /bin/othershell john
+
+$ cat /etc/passwd
+
+$ sudo useradd --uid 1100 smith ==> sudo useradd -u 1100 smith
+
+$ ls -ln /home/
+
+$ id
+
+$ whoami
+
+$ sudo useradd --system sysacc
+
+$ sudo userdel -r john
+$ sudo userdel -r smith
+
+$ useradd --help
+
+$ sudo useradd john
+$ sudo usermod --home /home/otherdirectory --move-home john
+$ sudo usermod -d /home/otherdirectory -m john
+
+$ sudo usermod --login jane john ==> sudo usermod -l jane john
+$ sudo usermod --shell /bin/othershell jane ==> sudo usermod -s /bin/othershell jane
+
+$ sudo usermod --lock jane ==>  sudo usermod -L jane
+$ sudo usermod --unlock jane ==> sudo usermod -U jane
+
+$ sudo usermod --expiredate 2021-12-10 jane ==> sudo usermod -e 2021-12-10 jane
+
+$ sudo usermod --expiredate "" jane ==> sudo usermod -e "" jane
+
+$ sudo chage --lastday 0 jane ==> sudo change -d 0 jane
+$ sudo chage --lastady -1 jane ==> sudo change -d -1 jane
+
+$ sudo chage --maxdays 30 jane ==> sudo chage -M 30 jane
+$ sudo chage --maxdays -1 jane ==> sudo chge -M -1 jane
+
+$ sudo chage --list jane ===> sudo chage -l jane
+
+$ sudo userdel -r jane
+
+$ sudo groupdel john
+
+# Create, delete, and modify local groups and group memberships
+
+$ sudo useradd richard
+$ sudo groupadd developers
+
+$ sudo gpasswd --add richard developers ==> sudo jpasswd --a richard developers
+
+$ groups richard
+
+$ sudo gpasswd --delete richard developers ==> sudo gpasswd -d richard developers
+
+$ sudo usermod -g developers richard
+$ sudo usermod --gid developers richard ==> sudo usermod -G developers richard
+
+$ groups richard
+
+$ gpasswd --help
+
+$ sudo groupmod --new-name programmers developers ==> sudo groupmod -n programmers developers
+
+$ sudo groupdel programmers
+
+$ sudo usermod --gid richard richard
+
+$ sudo groupdel programmers
