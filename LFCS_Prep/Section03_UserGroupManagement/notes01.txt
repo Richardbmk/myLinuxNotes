@@ -82,3 +82,52 @@ $ sudo groupdel programmers
 $ sudo usermod --gid richard richard
 
 $ sudo groupdel programmers
+
+# Manage system-wide environment profiles
+
+$ printenv ===> env
+$ HISTSIZE=2000
+$ history
+
+$ echo $HOME
+
+$ touch $HOME/saved_file
+
+$ cat .bashrc
+$ sudo vim /etc/environment
+  KODEKLOUD=https://kodekloud.com/
+
+$ logout
+
+$ echo $KODEKLOUD
+
+$ sudo vim /etc/profile.d/lastlogin.sh
+  echo "Your last login was at: " > $HOME/lastlogin
+  date >> $HOME/lastlogin
+
+$ logout
+
+$ ls
+
+$ cat lastlogin
+
+# Manage template user environment
+
+$ sudo vim /etc/skel/README 
+  Please don't run CPU-intensive processes between 8AM and 10PM
+
+$ sudo useradd trinity
+$ sudo ls -a /home/trinity
+
+$ cat README
+
+$ sudo vim /home/triniti/.bashrc
+  PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+  PATH="$HOME/.local/bin:$HOME/bin:/opt/bin:$PATH"
+
+$ echo $PATH
+
+$ specialtool
+
+$ sudo vim /etc/skel/.bashrc
+
