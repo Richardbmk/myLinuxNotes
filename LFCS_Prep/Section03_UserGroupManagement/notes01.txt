@@ -131,3 +131,65 @@ $ specialtool
 
 $ sudo vim /etc/skel/.bashrc
 
+# Configure user resource limits
+
+$ sudo vi /etc/security/limits.conf
+    <domain>    <type>    <item>    <value>
+    trinity     hard      nproc     10
+    @developers soft      nproc     20  
+
+$ man limits.conf
+
+$ sudo -iu trinity
+$ ps | less
+
+$ ls -a | grep bash | less
+
+$ logout
+
+$ ulimit -a
+
+$ ulimit -u 5000
+
+# Manage user privileges
+
+$ groups
+$ sudo gpasswd -a trinity wheel
+
+$ sudo gpasswd -d trinity wheel
+$ sudo visudo
+    user/group    host=(run_as_user)    command_list
+    %wheel        ALL=(ALL)             ALL
+    trinity       ALL=(ALL)             ALL
+    %developers   ALL=(ALL)             ALL
+    trinity       ALL=(aaron, john)     ALL
+    trinity       ALL=(ALL)             /bin/ls, /bin/stat
+    trinity       ALL=                 /bin/ls, /bin/stat
+    trinity       ALL=                 NOPASSWD:ALL
+
+
+$ sudo -u trinity ls /home/trinity
+$ sudo ls
+$ sudo stat /bin
+
+# Manage access to the root account
+
+$ sudo ls /root/
+$ sudo --login ==> sudo -i
+$ logout
+$ su - ==> su -l ==> su --login
+
+$ sudo --login
+$ sudo passwd root
+$ sudo passwd --unlock root ==> sudo passwd -u root
+$ su -
+
+$ sudo passwd --lock root ==> sudo passwd -l root
+
+# Configure PAM (Pluggable Authentication Modules)
+$ su
+
+$ ls /etc/pam.d/
+$ sudo vim /etc/pam.d/su
+$ man pam.conf
+$ man pam_wheel
