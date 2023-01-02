@@ -1,0 +1,70 @@
+# Configure networking and hostname resolution statically or dynamically
+
+--> DHCP: Dynamic Hosting Configuration Protocol
+
+$ ip link show ==> $ ip l
+$ ip addresses how ==> ip a
+
+$ ip route show ==> ip r
+
+$ cat /etc/resolv.conf
+
+$ ls /etc/sysconfig/network-scripts/
+$ cat /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
+$ sudo nmtui
+$ sudo ip a add 10.0.0.50/24 dev eth1
+$ sudo nmcli device reapply enps03
+$ ip l
+
+$ ping google.com
+
+$ sudo vi /etc/hosts
+  192.168.1.82 dbserver
+$ ping dbserver
+$ ssh aaron@dbserver
+
+$ ip [TAB] [TAB]
+$ NMCLI [TAB] [TAB]
+
+# Configure network services to start automatically at boot
+
+$ systemctl status NetworkManager.service
+
+$ sudo dnf install NetworkManager
+$ sudo systemctl start NetworkManager
+$ sudo systemctl enable NetworkManager
+
+$ nmcli connection show
+$ sudo nmcli connection modify enp0s3 autoconnect yes
+
+# Start, stop, and check the status of network services
+
+$ sudo ss -ltunp ==> sudo ss -tunlp
+  - l = listening
+  - t = TCP connections
+  - u = UDP connections
+  - n = numeric values
+  - p = process
+
+$ ss --help
+
+$ sudo ss -tunlp
+$ systemctl status chronyd.service
+$ systemctl status sshd.service
+
+$ sudo systemctl stop chronyd.service
+$ sudo ss -tunlp
+
+$ sudo systemctl disable chronyd.service
+$ sudo systemctl enable chronyd.service
+$ sudo systemctl start chronyd.service
+
+$ sudo ss -ltunp
+$ ps 1031
+$ sudo lsof -p 1031
+
+$ sudo netstat -tunlp ===> $ sudo ss -ltunp
+
+$ hostnamectl
+$ sudo hostnamectl set-hostname dev-host01
