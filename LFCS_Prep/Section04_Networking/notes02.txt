@@ -1,0 +1,59 @@
+# Implement packet filtering
+
+$ firewall-cmd --get-default-zone
+$ firewall-cmd --set-default-zone=public
+
+$ sudo firewall-cmd --list-all
+$ sudo firewall-cmd --info-service=cockpit
+
+$ sudo firewall-cmd --add-service=http ==> sudo firewall-cmd --add-port=80/tcp
+$ sudo firewall-cmd --list-all
+$ sudo firewall-cmd --remove-service=http ==> sudo firewall-cmd --remove-port=80/tcp
+
+$ sudo firewall-cmd --add-source=10.11.12.0/24 --zone=trusted
+$ firewall-cmd --get-active-zones
+$ sudo firewall-cmd --remove-source=10.11.12.0/24 --zone=trusted
+
+$ sudo firewall-cmd --add-port=12345/tcp
+
+$ sudo firewall-cmd --list-all
+
+$ sudo firewall-cmd --runtime-to-permanent
+
+$ sudo firewall-cmd --add-port=12345/tcp --permanent
+
+# Statically route IP traffic
+
+$ sudo ip route add 192.168.0.0/24 via 10.0.0.100 
+$ sudo ip route add 192.168.0.0/24 via 10.0.0.100 dev enp0s3
+$ sudo ip route del 192.168.0.0/24
+
+$ sudo ip route add default via 10.0.0.100 [Gateway]
+$ sudo ip route del default via 10.0.0.100
+
+$ nmcli connection show
+
+$ sudo nmcli connection modify enp0s3 +ipv4.routes "192.168.0.0/24 10.0.0.100"
+$ sudo nmcli device reapply enp0s3
+$ ip route show
+$ sudo nmcli connection modify enp0s3 -ipv4.routes "192.168.0.0/24 10.0.0.100"
+$ sudo nmcli device reapply enp0s3
+
+$ sudo nmtui [to use a UI to do the same]
+
+# Synchronize time using other network peers
+
+$ systemctl status chronyd.service
+
+$ timedatectl
+
+$ sudo timedatectl set-timezone America/New_York
+$ timedatectl list-timezones
+
+$ sudo dnf install chrony
+$ sudo systemctl start chronyd.service
+$ sudo systemctl enable chronyd.service
+$ timedatectl
+$ sudo timedatectl set-ntp true
+
+$ sudo ip a add 10.0.0.50/24 dev eth1
