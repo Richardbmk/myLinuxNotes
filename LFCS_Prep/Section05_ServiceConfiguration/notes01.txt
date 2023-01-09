@@ -1,6 +1,6 @@
 # Configure a caching DNS server
 
-$ sudo dnf install bind ind-utils
+$ sudo dnf install bind bind-utils
 
 $ man named.conf
 
@@ -32,3 +32,66 @@ $ dig @127.0.0.1 google.com ==> dig @localhost google.com
 $ dig @127.0.0.1 google.com
 
 $ dig @127.0.0.1 google.com
+
+# Maintain a DNS zone
+
+$ sudo vi /etc/named.conf
+
+    zone "example.com" IN {
+        type master;
+        file "example.com.zone";
+    };
+
+$ sudo ls /var/named/
+$ sudo cp --preserve=ownership /var/named/named.localhost /var/named/example.com.zone
+$ sudo vi /var/named/example.com.zone
+    $TTL  1H
+    @       IN SOA @  administrator.example.com. (
+                                      0     ; serial
+                                      1D    ; refresher
+                                      1H    ; retry
+                                      1W    ; expire
+                                      3H )  ; minimum
+
+    @             NS      ns1.example.com.
+    @             NS      ns2.example.com.
+    ns1           A       10.11.12.9
+    ns2           A       10.11.12.10
+    @             A       203.0.113.15
+    www           A       203.0.113.15
+    www           CANME   203.0.113.15
+    example.com.  MX 10   mail.example.com.
+                  MX 20   mail.example.com.
+    mail          A       203.0.113.80
+    mail2         A       203.0.113.81
+    server1       AAAA    2001:DBB:10::1
+    example.com.  TXT     "We can write anything in here!"
+
+
+$ sudo systemctl restart named.service
+$ dig @localhost example.com
+$ dig @localhost mail.example.com
+$ dig @localhost example.com ANY
+
+
+# Configure email aliases
+
+$ sudo dnf install postfix
+$ sudo systemctl start postfix
+$ sudo systemctl enable postfix
+
+$ sendmail aaron@localhost <<< "Hello, I'm just testing email."
+
+$ cat /var/spool/mail/aaron
+
+$ sudo vi /etc/aliases
+    advertising: aaron
+
+$ sudo newaliases
+
+$ sendmail advertising@localhost <<< "Hello, I'm just testing email."
+$ cat /var/spool/mail/aaron
+
+$ sudo vi /etc/aliases
+    contact: aaron,john,jane
+$ sudo newaliases
