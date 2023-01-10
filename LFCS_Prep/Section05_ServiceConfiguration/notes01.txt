@@ -95,3 +95,48 @@ $ cat /var/spool/mail/aaron
 $ sudo vi /etc/aliases
     contact: aaron,john,jane
 $ sudo newaliases
+
+# Configure an IMAP  and IMAPS service
+
+--> Internet Message Access Protocol : IMAP
+--> Internet Message Access Protocol SSL: IMAPS
+
+$ sudo dnf install dovecot
+$ sudo systemctl start dovecot
+$ sudo systemctl enable dovecot
+
+$ sudo firewall-cmd --add-service=imap
+$ sudo firewall-cmd --add-service=imaps
+
+$ sudo firewall-cmd --runtime-to-permanent
+
+$ sudo vi /etc/dovecot/dovecot.conf
+        protocols = imap
+
+        listen = 10.11.12.9
+
+$ ls /etc/dovecot/conf.d/
+
+$ ls /etc/dovecot/conf.d/10-master.conf
+    service imap-login {
+        inet_listener imap {
+            #port = 143
+        }
+        inet_listener imaps {
+            port = 993
+            #ssl = yes
+        }
+    }
+
+$ sudo vi /etc/dovecot/conf.d/10-email.conf
+    mail_location = mbox:~/mail:INBOX=/var/mail/%u
+
+$ sudo vi /etc/dovecot/conf.d/10-ssl.conf
+    ssl = yes
+
+    ssl_cert = </etc/pki/dovecot/certs/dovecot.pem
+    ssl_cert = </etc/pki/dovecot/private/dovecot.pem
+
+
+LAB SOlutions:
+$ echo "This is a test email" | mailx -s "Hi John" john
