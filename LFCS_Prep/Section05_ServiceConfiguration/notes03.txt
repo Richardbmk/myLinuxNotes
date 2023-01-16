@@ -1,0 +1,157 @@
+# Configure an HTTP server
+
+$ sudo dnf install httpd
+
+$ sudo firewall-cmd --add-service=http
+$ sudo firewall-cmd --add-service=https
+$ sudo firewall-cmd --runtime-to-permanent
+
+$ sudo dnf install mod_ssl
+
+$ sudo systemctl start httpd
+$ sudo systemctl enable httpd
+
+$ man httpd.conf
+
+$ ls /etc/httpd
+$ ls /etc/httpd/conf.d
+$ ls /etc/httpd/conf/
+$ sudo vi /etc/httpd/conf/httpd.conf
+    Listen 8080
+    Listen 10.11.12.9:8080
+    
+    Server Admin root@localhost
+    Server Admin webserver@example.com
+
+    ServerName www.example.com:80
+    ServerName 10.11.12.9
+
+    DocumentRoot "/var/www/html"
+
+$ sudo vi /etc/httpd/conf.d/two-websites.conf
+    <VirtualHost *:80>
+        ServerName store.example.com
+        DocumentRoot /var/www/store/
+    </VirtualHost>
+
+    <VirtualHost *:80>
+        ServerName blog.example.com
+        DocumentRoot /var/www/blog/
+    </VirtualHost>
+
+    <VirtualHost 10.11.12.9:80>
+        ServerName blog.example.com
+        DocumentRoot /var/www/blog/
+    </VirtualHost>
+
+$ apachectl configtest
+$ sudo mkdir /var/www/store
+$ sudo mkdir /var/www/blog
+$ apachectl configtest
+
+$ sudo vi /var/www/html/index.html
+    This is the MAIN website
+
+$ sudo vi /var/www/blog/index.html
+    This is BLOG
+
+$ sudo vi /var/www/store/index.html
+    This is the STORE
+
+$ sudo systemctl reload httpd.service
+
+$ sudo vi /etc/httpd/conf.d/ssl.conf
+    Listen 443 https
+
+    <VirtualHost *:443>
+        ServerName www.example.com
+        SSLEngine on
+        SSLCertificateFile "/path/to/file.cert"
+        SSLCertificateKeyFile "/path/to/file.key"
+    </VirtualHost>
+
+$ ls /etc/httpd/conf.modules.d/
+$ sudo vi /etc/httpd/conf.modules.d/00-mpm.conf
+    LoadModule mpm_prefork_module modules/mod_mpm_prefork.so
+    # LoadModule mpm_event_module modules/mod_mpm_event.so
+
+$ sudo vi /etc/httpd/conf.modules.d/00-optional.conf
+$ sudo vi /etc/httpd/conf.modules.d/00-base.conf
+
+# Configure HTTP server log files
+
+$ sudo vi /etc/httpd/conf/httpd.conf
+
+    ServerRoot "/etc/httpd"
+
+    ErrorLog "logs/error_log"
+    ErrorLog "/var/log/httpd/error2.log"
+
+    LogLevel warn
+
+
+$ sudo cat /var/log/httpd/access_log
+
+$ sudo vi /etc/httpd/conf.d/two-websites.conf
+    <VirtualHost *:80>
+        ServerName store.example.com
+        DocumentRoot /var/www/store/
+        CustomLog /var/log/httpd/store.example.com_access.log combined
+        ErrorLog /var/log/httpd/store.example.com_error.log
+    </VirtualHost>
+
+$ sudo systemctl reload httpd.service
+$ sudo ls /var/log/httpd
+$ sudo ls /var/log/httpd/store.example.com_access.log
+$ sudo ls /var/log/httpd/store.example.com_error.log
+
+
+# Restrict access to a web page
+
+$ sudo mv /etc/httpd/conf.d/two-websites.conf /etc/httpd/conf.d/two-websites.conf.disabled
+
+$ sudo systemctl reload httpd.service
+$ sudo vim /etc/httpd/conf/httpd.conf
+    DocumentRoot "/var/www/html"
+
+    <Directory "/var/www/html">
+        Options Indexes FollowSymLinks
+        Options FollowSymLinks
+        #
+        AllowOverride None
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    <Directory "/var/www/html/admin">
+        Require all denied
+        Require all ip 192.168.1.79 203.0.1.113
+    </Directory>
+
+    <Files ".ht*">
+        Require all denied
+    </Files>
+
+    <Files "*.txt">
+        Require all denied
+    </Files>
+
+    <Directory "/var/www/html/admin">
+        AuthType Basic
+        AuthBasicProvider file
+        AuthName "Secret admin page"
+        AuthUserFile /etc/httpd/passwords
+        Require valid-user
+    </Directory>
+
+$ sudo mkdir /var/www/html/admin
+$ sudo touch /var/www/html/admin/files{1..3}
+
+$ sudo systemctl reload httpd.service
+
+$ sudo htpasswd -c /etc/httpd/passwords aaron
+$ sudo htpasswd /etc/httpd/passwords jonh
+$ sudo cat /etc/httpd/passwords
+
+$ sudo htpasswd -D /etc/httpd/passwords jonh
+
