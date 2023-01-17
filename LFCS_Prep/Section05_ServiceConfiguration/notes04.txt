@@ -1,0 +1,135 @@
+# Configure a database server
+
+$ sudo dnf install mariadb-server
+$ sudo systemctl start mariadb.service
+$ sudo systemctl enable mariadb.service
+
+$ sudo firewall-cmd --add-service=mysql --permanent
+
+$ mysql -u root
+
+$ mysql_secure_installation
+$ mysql [TAB] [TAB]
+
+$ mysql_secure_installation
+
+$ mysql -u root
+$ mysql -u root -p
+
+> exit
+
+$ cat /etc/my.cnf
+
+$ sudo vi /etc/my.cfn.d/mariadb-server.cnf
+    [mysqld]
+    # datadir=/var/lib/mysql
+    datadir=/mnt/Storage
+    socket=/var/lib/mysql/mysql.sock
+    log-error=/var/log/mariadb/mariadb.log
+    log-file=/run/mariadb/mariadb.pit
+
+    # bind-address=0.0.0.0
+    bind-address=10.0.0.5
+
+$ sudo vi /etc/my.cnf.d/mysql-server.cnf (for mysql configuration only, not mariadb)
+
+# Manage and configure containers
+
+$ sudo dnf install docker -y
+
+$ sudo vi /etc/containers/registries.conf
+    # unqualified-search-registries = []
+    unqualified-search-registries=["docker.io"]
+
+$ docker
+$ sudo touch /etc/containers/nodocker
+$ docker --help
+
+$ docker search nginx
+
+$ docker pull docker.io/library/nginx
+
+$ docker images
+
+$ docker rmi nginx:1.20.2
+
+$ docker run nginx
+$ docker run -d nginx
+
+$ docker ps ---> $ docker container list
+
+$ docker stop name/id
+$ docker ps --all
+$ docker rm  name/id
+
+$ docker start name/id
+$ docker rmi --force nginx
+
+$ nc localhost 8080
+    GET /
+
+$ sudo docker run -d -p 80:80 --name mywebserver nginx
+
+# Manage and configure Virtual Machines
+
+$ sudo dnf install libvirt qemu-kvm -y
+
+$ vi testmachine.xml
+    <domain type="qemu">
+        <name>TestMachine</name>
+        <memory unit="GiB">1</memory>
+        <vcpu>1</vcpu>
+        <os>
+            <type arch='x86_64'>hvm</type>
+        </os>
+    </domain>
+
+$ virsh define testmachine.xml
+$ virsh --help
+$ virsh list
+$ virsh list --all
+$ virsh start TestMachine
+$ virsh list
+
+$ virsh reboot TestMachine
+$ virsh reset TestMachine
+$ virsh shutdown TestMachine
+
+$ virsh destroy TestMachine
+
+$ virsh list --all
+
+$ virsh undefine TestMachine
+$ virsh undefine help
+$ virsh help undefine
+$ virsh undefine --remove-all-storage TestMachine
+$ virsh list --all
+$ virsh define testmachine.xml
+$ virsh autostart TestMachine
+
+$ virsh autostart --disable TestMachine
+
+$ virsh dominfo TestMachine
+
+$ virsh set[TAB][TAB]
+
+$ virsh help setvcpus
+
+$ virsh setvcpus
+$ virsh setvcpus TestMachine 2 --config
+$ virsh setvcpus TestMachine 2 --config --maximum
+$ virsh setvcpus TestMachine 2 --config
+
+$ virsh dominfo TestMachine
+
+$ virsh shutdown TestMachine
+$ virsh destroy TestMachine
+$ virsh start TestMachine
+
+$ virsh dominfo TestMachine
+
+$ virsh setmaxmem TestMachine 2048M --config
+
+$ virsh shutdown TestMachine
+$ virsh destroy TestMachine
+$ virsh start TestMachine
