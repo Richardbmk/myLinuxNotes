@@ -1,0 +1,86 @@
+# List, create, delete, and modify physical storage partitions
+
+$ lsblk
+$ sudo fdisk --list /dev/sda
+$ sudo cfdisk /dev/sdb
+
+# Configure and manage swap space
+
+$ swapon --show
+$ lsblk
+$ sudo mkswap /dev/vdb3
+$ sudo swapon --verbose /dev/vdb3
+$ swapon --show
+$ sudo swapoff /dev/vdb3
+$ sudo dd if=/dev/zero of=/swap bs=1M count=128
+$ sudo dd if=/dev/zero of=/swap bs=1M count=128 status=progress
+$ sudo chmod 600 /swap
+
+$ sudo mkswap /swap
+$ sudo swapon --verbose /swap
+$ swapon --show
+
+# Create and configure file systems
+
+$ sudo mkfs.xfs /dev/sdb1
+$ sudo mkfs.ext4 /dev/sdb1
+
+$ man mkfs.xfs
+
+$ sudo mkfs.xfs -L "BackupVolume" /dev/sdb1
+$ mkfs.xfs
+
+$ sudo mkfs.xfs -i size=512 "BackupVolume" /dev/sdb1
+$ xfs [TAB] [TAB]
+
+$ sudo xfs xfs_admin -l /dev/sdb1
+$ sudo xfs xfs_admin -L "FirstFS" /dev/sdb1
+
+$ man mkfs.ext4
+
+$ sudo mkfs.ext4 -L "BackupVolume" -N 500000 /dev/sdb2
+$ sudo tune2fs -l /dev/sdb2
+$ sudo tune2fs -L "SecondFS" /dev/sdb2
+
+$ man mkfs.ext4
+$ man mkfs.xsf
+
+# Configure systems to mount file systems at or during boot
+
+$ ls /mnt/
+$ sudo mount /dev/vdb1 /mnt/
+$ sudo touch /mnt/testfile
+$ ls -l /mnt/
+$ lsblk
+
+$ sudo umount /mnt/
+$ lsblk
+$ ls /mnt/
+
+sudo mkdir /mybackups/
+
+$ sudo vim /etc/fstab
+    /dev/mapper/cs-root     /       xfs     defaults        0       0
+    /dev/vdb1               /mybackups  etx4     defaults 0 2
+
+$ sudo systemctl daemon-reload
+$ ls /mybackups
+$ lsblk
+
+$ sudo systemctl reboot
+$ ls -l /mybackups
+$ lsblk
+
+$ man fstab
+
+$ sudo vi /etc/fstab
+    /dev/mapper/cs-root     /       xfs     defaults        0       0
+    /dev/vdb3       none        swap    defaults            0       0
+
+$ swapon --shown
+
+$ sudo vi /etc/fstab
+    UUID=98kjshdf9824howelsfj    /boot       xfs     defaults        0       0
+$ sudo blkid /dev/vdb1
+
+
