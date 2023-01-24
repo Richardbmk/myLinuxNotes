@@ -1,0 +1,68 @@
+# Configure systems to mount file systems on demand
+
+$ sudo dnf install autofs
+$ sudo systemctl start autofs.service
+$ sudo systemctl enable autofs.service
+
+$ sudo dnf install nfs-utils
+$ sudo systemctl start nfs-server.service
+$ sudo systemctl enable nfs-server.service
+
+$ sudo vim /etc/exports
+    /etc 127.0.0.1(ro)
+
+$ sudo systemctl reload nfs-server.service
+
+$ sudo vim /etc/auto.master
+    /shares/ /etc/auto.shares --timeout=400
+
+$ sudo vim /etc/auto.shares 
+    mynetworkshare -fstype=auto 127.0.0.1:/etc
+    mynetworkshare -fstype=nfs4 127.0.0.1:/etc
+    mynetworkshare -fstype=auto,ro 127.0.0.1:/etc
+    mynetworkshare -fstype=auto,ro nfs1.example.com:/etc
+    myext4files -fstype=auto :/dev/vdb2
+
+$ sudo systemctl reload autofs
+$ ls /shares/
+$ ls /shares/mynetworkshare
+
+$ sudo vim /etc/auto.master
+    /- /etc/auto.shares --timeout=400
+
+$ sudo vim /etc/auto.shares
+    /mynetworkshare -fstype=auto 127.0.0.1:/etc
+    /localfiles/myext4files -fstype=auto :/dev/vdb2
+
+$ sudo systemctl reload autofs
+$ ls /mynetworkshare/
+$ ls /localfiles/myext4files/
+
+# Evaluate and compare the basic file system features and options
+
+$ findmnt
+$ findmnt -t xfs,ext4
+
+$ sudo mount -o ro /dev/vdb2 /mnt
+$ findmnt -t xfs,ext4
+
+$ sudo umount /mnt
+$ sudo mount -o ro,noexec,nosuid /dev/vdb2 /mnt
+$ findmnt -t xfs,ext4
+
+$ sudo mount -o rw,noexec,nosuid /dev/vdb2 /mnt
+$ sudo mount -o remount,rw,noexec,nosuid /dev/vdb2 /mnt
+
+$ man mount
+
+$ man xfs
+
+$ sudo umount /dev/vdb1
+$ sudo mount -o allocsize=32K /dev/vdb1 /mybackups
+
+$ sudo vi /etc/fstab
+    /dev/vdb1   /mybackups xfs defaults 0 2
+    /dev/vdb1   /mybackups xfs ro,noexec 0 2
+
+$ sudo systemctl reboot
+$ findmnt -t xfs,ext4
