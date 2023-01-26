@@ -1,0 +1,92 @@
+# Create and manage RAID devices
+
+$ sudo vgremove --force my_volume
+$ sudo pvremove /dev/vdc /dev/vdd /dev/vde
+$ sudo mdadm --create /dev/md0 --level=0 --raid-devices=3 /dev/vdc /dev/vdd /dev/vde
+
+$ sudo mkfs.ext4 /dev/md0
+$ sudo mdadm --stop /dev/md0
+
+$ sudo mdadm --zero-superblock /dev/vdc /dev/vdd /dev/vde
+
+$ sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/vdc /dev/vdd --spare-devices=1 /dev/vde
+$ sudo mdadm --stop /dev/md0
+$ sudo mdadm --zero-superblock /dev/vdc /dev/vdd /dev/vde
+
+$ sudo mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/vdc /dev/vdd
+
+$ sudo mdadm --manage /dev/md0 --add /dev/vde
+
+$ cat /proc/mdstat
+
+$ sudo mdadm --mage /dev/md0 --remove /dev/vde
+
+# Create, manage and diagnose advanced file system permissions
+
+$ ls -l
+$ echo "This is a new file with value content" > examplefile
+$ sudo chown adm:ftp examplefile
+$ ls -l examplefile
+$ echo "This is a new file with value content newnew" > examplefile
+$ cat examplefile
+
+$ sudo setfacl --modify user:aaron:rw examplefile
+$ echo "This is a new file with value contentnewnew" > examplefile
+$ cat examplefile
+
+$ ls -l
+
+$ getfacl examplefile
+$ sudo setfactl --modify mask:r examplefile
+$ getfacl examplefile
+
+$ sudo setfacl --modify group:wheel:rw examplefile
+$ sudo setfacl --modify user:aaron:--- examplefile
+$ sudo setfacl --remove user:aaron examplefile
+$ sudo setfacl --remove group:wheel examplefile
+$ setfacl --recursive -m user:aaron:rwx dir1/
+$ setfacl --recursive --remove user:aaron dir1/
+
+$ echo "This is old content" > newfile
+$ sudo chattr +a newfile
+$ cat newfile
+$ echo "Replace with this conent" > newfile
+$ echo "Replace with this conent" >> newfile
+
+$ sudo chattr -a newfile
+$ sudo chattr +i newfile
+$ sudo rm newfile
+
+$ lsattr newfile
+$ sudo chattr -i newfile
+
+$ man chattr
+
+# Setup user and group disk quotas for filesystems
+
+$ sudo dnf install quota
+$ sudo vi /etc/fstab
+    /dev/vdb1 /mybackups xfs ro,noexec 0 2
+    /dev/vdb1 /mybackups xfs defaults,usrquota,grpquota 0 2
+
+$ sudo systemctl reboot 
+
+$ sudo quotacheck --create-fies --user --group /dev/vdb2
+$ sudo quotaon /mnt/
+
+$ sudo mkdir /mybackups/aaron/
+$ sudo chown aaron:aaron /mybackups/aaron
+$ fallocate --length 100M /mybackups/aaron/100Mfile
+$ sudo edquota --user aaron
+
+$ fallocate --length 60M /mybackups/aaron/60Mfile
+
+$ sudo quota --user aaron
+
+$ fallocate --length 40M /mybackups/aaron/40Mfile
+$ sudo edquota --user aaron
+$ touch /mybackups/aaron/newfile
+
+$ sudo quota --edit-period
+$ sudo edquota --group adm
+$ sudo quota --group adm
