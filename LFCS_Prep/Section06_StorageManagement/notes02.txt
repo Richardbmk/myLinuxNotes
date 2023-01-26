@@ -66,3 +66,63 @@ $ sudo vi /etc/fstab
 
 $ sudo systemctl reboot
 $ findmnt -t xfs,ext4
+
+# Manage and configure LVM storage
+
+$ sudo dnf install lvm2
+
+$ sudo lvmdiskscan
+$ sudo pvcreate /dev/sdc /dev/sdd
+$ sudo pvs
+
+$ sudo vgcreate my_volume /dev/sdc /dev/sdd
+
+$ sudo pvcreate /dev/sde
+$ sudo vgextend myvolume /dev/sde
+$ sudo vgs
+
+$ sudo vgreduce my_volume /dev/sde
+$ sudo pvremove /dev/sde
+
+$ sudo lvcreate --size 2G --name partition1 my_volume
+$ sudo vgs
+
+$ sudo lvcreate --size 6G --name partition2 my_volume
+$ sudo lvs
+$ sudo vgs
+
+$ sudo lvresize --extents 100%VG my_volume/partition1
+$ sudo lvresize --size sG my_volume/partition1
+
+$ sudo lvdisplay
+
+$ sudo mkfs.xfs /dev/my_volume/partition1
+
+$ sudo lvresize --resizefs --size 3G my_volume/partition1
+
+$ man lvm
+$ vg [TAB][TAB]
+
+# Create and configure encrypted storage
+
+$ sudo cryptsetup --verify-passphrase open --type plain /dev/vde mysecuredisk
+
+$ sudo mkfs.xfs /dev/mapper/mysecuredisk
+$ sudo mount /dev/mapper/mysecuredisk /mnt
+$ sudo umount
+$ sudo cryptsetup close mysecuredisk
+
+$ sudo cryptsetup luksFormat /dev/vde
+
+$ cryptsetup
+$ sudo cryptsetup luksFormat /dev/vde
+$ sudo cryptsetup luksChangeKey /dev/vde
+$ sudo cryptsetup open /dev/vde mysecuredisk
+
+$ sudo mkfs.xfs /dev/mapper/mysecuredisk
+$ sudo cryptsetup close mysecuredisk
+
+$ sudo cryptsetup luksFormat /dev/vde2
+$ sudo cryptsetup open /dev/vde2 mysecuredisk
+$ sudo cryptsetup --verify-passphrase open --type plain /dev/vde2 mysecuredisk
+
