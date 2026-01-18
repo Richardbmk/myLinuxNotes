@@ -1,0 +1,2 @@
+ls: /non_existent_file: No such file or directory
+[2026-01-17T14:02:05+0100]: Unable to list /non_existent_file
